@@ -1,10 +1,10 @@
-menu PS4
+menu ps5
 
     choice IDF_COMPATIBILITY
         prompt "Framework compatibility"
         default IDF_COMPATIBILITY_STABLE
         help
-            The esp32-ps4 project uses internal APIs that can change without notice.
+            The esp32-ps5 project uses internal APIs that can change without notice.
 
             This option allows you to use older ESP-IDF versions, in case you get compilation
             errors.

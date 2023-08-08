@@ -1,10 +1,11 @@
-#include <PS4Controller.h>
+//#include <PS4Controller.h>
+#include <ps5Controller.h>
 #include <Arduino.h>
 
 unsigned long lastTimeStamp = 0;
 
 #define PI 3.1415926536
-int rightwheel[2]={12,14},leftwheel[2]={27,26},output[2],shooter[2]={23,22};
+int leftwheel[2]={12,14},rightwheel[2]={27,26},output[2],shooter[2]={23,22};
 int rawvalx,rawvaly;
 int shoot_flag=0;
 
@@ -66,22 +67,21 @@ void differential(int x,int y,int output[]){
 
 void notify()
 {  
-    rawvalx=PS4.LStickX()*2;
-    rawvaly=PS4.LStickY()*2;
-
-    if(PS4.L1()){
-      rawvalx=-255;
+    rawvalx=((ps5.LStickX()>-10 && 10>ps5.LStickX())?0:ps5.LStickX())*2;
+    rawvaly=((ps5.LStickY()>-10 && 10>ps5.LStickY())?0:ps5.LStickY())*2;
+    if(ps5.L1()){
+      rawvalx=-255; 
       rawvaly=0;
     }
-    if(PS4.R1()){
+    if(ps5.R1()){
       rawvalx=255;
       rawvaly=0;
     }
-    if(PS4.Down()){
+    if(ps5.Down()){
       rawvalx=0;
       rawvaly=-255;
     }
-    if(PS4.Up()){
+    if(ps5.Up()){
       rawvalx=0;
       rawvaly=255;
     }
@@ -98,7 +98,7 @@ void notify()
     Serial.print(output[0]);
     Serial.print(",");
     Serial.println(output[1]);
-  if(PS4.Square()==1 && shoot_flag==0)
+  if(ps5.Square()==1 && shoot_flag==0)
   { Serial.println("square pressed");
     digitalWrite(shooter[1],1);
     ledcWrite(2,255);
@@ -114,7 +114,7 @@ void notify()
   else{
     shoot_flag=0;
   }
-  if(PS4.Circle())
+  if(ps5.Circle())
   {
     digitalWrite(shooter[1],0);
     ledcWrite(2,100);
@@ -155,10 +155,10 @@ void setup()
   ledcAttachPin(23, 2);
   pinMode(22,OUTPUT);
   
-  PS4.attachOnConnect(onConnect);
-  PS4.attachOnDisconnect(onDisConnect);
-  PS4.begin();
-  PS4.attach(notify);
+  ps5.attachOnConnect(onConnect);
+  ps5.attachOnDisconnect(onDisConnect);
+  ps5.begin("7c:66:ef:77:8a:4f");
+  ps5.attach(notify);
   Serial.println("Ready.");
 }
 

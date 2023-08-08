@@ -1,5 +1,5 @@
-#ifndef PS4_H
-#define PS4_H
+#ifndef ps5_H
+#define ps5_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -17,17 +17,17 @@ typedef struct {
   int8_t ly;
   int8_t rx;
   int8_t ry;
-} ps4_analog_stick_t;
+} ps5_analog_stick_t;
 
 typedef struct {
   uint8_t l2;
   uint8_t r2;
-} ps4_analog_button_t;
+} ps5_analog_button_t;
 
 typedef struct {
-  ps4_analog_stick_t stick;
-  ps4_analog_button_t button;
-} ps4_analog_t;
+  ps5_analog_stick_t stick;
+  ps5_analog_button_t button;
+} ps5_analog_t;
 
 /*********************/
 /*   B U T T O N S   */
@@ -61,7 +61,7 @@ typedef struct {
 
   uint8_t ps : 1;
   uint8_t touchpad : 1;
-} ps4_button_t;
+} ps5_button_t;
 
 /*******************************/
 /*   S T A T U S   F L A G S   */
@@ -72,7 +72,7 @@ typedef struct {
   uint8_t charging : 1;
   uint8_t audio : 1;
   uint8_t mic : 1;
-} ps4_status_t;
+} ps5_status_t;
 
 /********************/
 /*   S E N S O R S  */
@@ -80,18 +80,18 @@ typedef struct {
 
 typedef struct {
   int16_t z;
-} ps4_sensor_gyroscope_t;
+} ps5_sensor_gyroscope_t;
 
 typedef struct {
   int16_t x;
   int16_t y;
   int16_t z;
-} ps4_sensor_accelerometer_t;
+} ps5_sensor_accelerometer_t;
 
 typedef struct {
-  ps4_sensor_accelerometer_t accelerometer;
-  ps4_sensor_gyroscope_t gyroscope;
-} ps4_sensor_t;
+  ps5_sensor_accelerometer_t accelerometer;
+  ps5_sensor_gyroscope_t gyroscope;
+} ps5_sensor_t;
 
 /*******************/
 /*    O T H E R    */
@@ -103,46 +103,48 @@ typedef struct {
   uint8_t r, g, b;
   uint8_t flashOn;
   uint8_t flashOff;  // Time to flash bright/dark (255 = 2.5 seconds)
-} ps4_cmd_t;
+} ps5_cmd_t;
 
 typedef struct {
-  ps4_button_t button_down;
-  ps4_button_t button_up;
-  ps4_analog_t analog_move;
-} ps4_event_t;
+  ps5_button_t button_down;
+  ps5_button_t button_up;
+  ps5_analog_t analog_move;
+} ps5_event_t;
 
 typedef struct {
-  ps4_analog_t analog;
-  ps4_button_t button;
-  ps4_status_t status;
-  ps4_sensor_t sensor;
+  ps5_analog_t analog;
+  ps5_button_t button;
+  ps5_status_t status;
+  ps5_sensor_t sensor;
   uint8_t* latestPacket;
-} ps4_t;
+} ps5_t;
 
 /***************************/
 /*    C A L L B A C K S    */
 /***************************/
 
-typedef void (*ps4_connection_callback_t)(uint8_t isConnected);
-typedef void (*ps4_connection_object_callback_t)(void* object, uint8_t isConnected);
+typedef void (*ps5_connection_callback_t)(uint8_t isConnected);
+typedef void (*ps5_connection_object_callback_t)(void* object, uint8_t isConnected);
 
-typedef void (*ps4_event_callback_t)(ps4_t ps4, ps4_event_t event);
-typedef void (*ps4_event_object_callback_t)(void* object, ps4_t ps4, ps4_event_t event);
+typedef void (*ps5_event_callback_t)(ps5_t ps5, ps5_event_t event);
+typedef void (*ps5_event_object_callback_t)(void* object, ps5_t ps5, ps5_event_t event);
 
 /********************************************************************************/
 /*                             F U N C T I O N S */
 /********************************************************************************/
 
-bool ps4IsConnected();
-void ps4Init();
-void ps4Enable();
-void ps4Cmd(ps4_cmd_t ps4_cmd);
-void ps4SetConnectionCallback(ps4_connection_callback_t cb);
-void ps4SetConnectionObjectCallback(void* object, ps4_connection_object_callback_t cb);
-void ps4SetEventCallback(ps4_event_callback_t cb);
-void ps4SetEventObjectCallback(void* object, ps4_event_object_callback_t cb);
-void ps4SetLed(uint8_t r, uint8_t g, uint8_t b);
-void ps4SetOutput(ps4_cmd_t prev_cmd);
-void ps4SetBluetoothMacAddress(const uint8_t* mac);
+bool ps5IsConnected();
+void ps5Init();
+void ps5Enable();
+void ps5Cmd(ps5_cmd_t ps5_cmd);
+void ps5SetConnectionCallback(ps5_connection_callback_t cb);
+void ps5SetConnectionObjectCallback(void* object, ps5_connection_object_callback_t cb);
+void ps5SetEventCallback(ps5_event_callback_t cb);
+void ps5SetEventObjectCallback(void* object, ps5_event_object_callback_t cb);
+void ps5SetLed(uint8_t r, uint8_t g, uint8_t b);
+void ps5SetOutput(ps5_cmd_t prev_cmd);
+void ps5SetBluetoothMacAddress(const uint8_t* mac);
+long ps5_l2cap_connect(uint8_t addr[6]);
+long ps5_l2cap_reconnect(void);
 
 #endif

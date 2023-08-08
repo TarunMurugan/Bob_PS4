@@ -1,21 +1,21 @@
-#ifndef PS4Controller_h
-#define PS4Controller_h
+#ifndef ps5Controller_h
+#define ps5Controller_h
 
 #include "Arduino.h"
 
 extern "C" {
-#include "ps4.h"
+#include "ps5.h"
 }
 
-class PS4Controller {
+class ps5Controller {
  public:
   typedef void (*callback_t)();
 
-  ps4_t data;
-  ps4_event_t event;
-  ps4_cmd_t output;
+  ps5_t data;
+  ps5_event_t event;
+  ps5_cmd_t output;
 
-  PS4Controller();
+  ps5Controller();
 
   bool begin();
   bool begin(const char* mac);
@@ -78,7 +78,7 @@ public:
   bool Mic() { return data.status.mic; }
 
  private:
-  static void _event_callback(void* object, ps4_t data, ps4_event_t event);
+  static void _event_callback(void* object, ps5_t data, ps5_event_t event);
   static void _connection_callback(void* object, uint8_t isConnected);
 
   callback_t _callback_event = nullptr;
@@ -87,7 +87,7 @@ public:
 };
 
 #ifndef NO_GLOBAL_INSTANCES
-extern PS4Controller PS4;
+extern ps5Controller ps5;
 #endif
 
 #endif
